@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
     <title>Exclusive Internship Offer</title>
@@ -158,12 +157,15 @@ function revealScam(name, usn) {
     clearInterval(countdownInterval);
 
     document.body.style.background =
-        "linear-gradient(135deg, #ff416c, blue)";
+        "linear-gradient(135deg, #ff416c, #ff4b2b)";
 
     document.getElementById("main").innerHTML = `
         <div class="container">
-            <h1 style="color: black;">⚠️ ${name} (${usn}), You Got Scammed!</h1>
-            <p>This was a Social Media Scam Awareness Simulation.</p>
+            <h1 class="danger">⚠️ ${name} (${usn}), You Got Scammed!</h1>
+           <h3>Total Students Who Clicked:
+           <span id="clickCounter">Loading...</span>
+           </h3>
+           <p>This was a Social Media Scam Awareness Simulation.</p>
             <hr style="width:60%;">
 
             <h3>🚨 Why It Felt Real</h3>
@@ -183,6 +185,38 @@ function revealScam(name, usn) {
 }
 
 </script>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCR-z_qe9U1cdE1Mh7MPKvFh1w2-xd8RrE",
+  authDomain: "internship-a2869.firebaseapp.com",
+  databaseURL: "https://internship-a2869-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "internship-a2869",
+  storageBucket: "internship-a2869.firebasestorage.app",
+  messagingSenderId: "273633014873",
+  appId: "1:273633014873:web:ada86491eac7187895ad48"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+const counterRef = ref(database, "clickCount");
+
+// Increase counter safely
+runTransaction(counterRef, (currentData) => {
+  return (currentData || 0) + 1;
+});
+
+// Live update display
+onValue(counterRef, (snapshot) => {
+  document.getElementById("clickCounter").innerText = snapshot.val();
+});
+
+</script>
+
 
 </body>
 </html>
